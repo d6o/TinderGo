@@ -69,6 +69,16 @@ func (t *TRequest) Get(url string) (string, []error) {
 		End()
 }
 
+func (t *TRequest) Post(url, data string) (string, []error) {
+	return t.requester.Post(url).
+		Send(data).
+		Set("Host", "api.gotinder.com").
+		Set("Authorization", "Token token=\""+t.token+"\"").
+		Set("User-Agent", "Tinder/6.9.1 (iPhone; iOS 10.2; Scale/2.00)").
+		Set("X-Auth-Token", t.token).
+		End()
+}
+
 type TAuthRequest struct {
 	Token string `json:"token"`
 }

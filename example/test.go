@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/disiqueira/tindergo"
 )
@@ -15,14 +16,15 @@ func main() {
 		panic(err)
 	}
 
-	recs, err := t.RecsSocial()
+	recs, err := t.RecsCore()
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(recs)
-	/*
-		for _, r := range recs.Results {
-			fmt.Println(r.)
-		}*/
+	for _, r := range recs {
+		u, _ := t.User(r.ID)
+		fmt.Println(u.Name)
+		fmt.Println(u.Bio)
+		os.Exit(2)
+	}
 }
