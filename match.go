@@ -71,7 +71,7 @@ func (t *TinderGo) Matches() ([]Match, error) {
 		return mr.Matches, errs[0]
 	}
 
-	err := json.Unmarshal([]byte(b), &recs)
+	err = json.Unmarshal([]byte(b), &mr)
 	if err != nil {
 		return mr.Matches, err
 	}

@@ -2,6 +2,7 @@ package tindergo
 
 import (
 	"encoding/json"
+	"strings"
 	"time"
 )
 
@@ -41,15 +42,15 @@ type Profile struct {
 	Location interface{} `json:"location"`
 	Name     string      `json:"name"`
 	Photos   []struct {
-		YoffsetPercent   int    `json:"yoffset_percent,omitempty"`
-		ID               string `json:"id"`
-		XdistancePercent int    `json:"xdistance_percent,omitempty"`
-		Main             bool   `json:"main,omitempty"`
-		YdistancePercent int    `json:"ydistance_percent,omitempty"`
-		XoffsetPercent   int    `json:"xoffset_percent,omitempty"`
-		FileName         string `json:"fileName"`
-		FbID             string `json:"fbId"`
-		Extension        string `json:"extension"`
+		YoffsetPercent   int     `json:"yoffset_percent,omitempty"`
+		ID               string  `json:"id"`
+		XdistancePercent float64 `json:"xdistance_percent,omitempty"`
+		Main             bool    `json:"main,omitempty"`
+		YdistancePercent float64 `json:"ydistance_percent,omitempty"`
+		XoffsetPercent   float64 `json:"xoffset_percent,omitempty"`
+		FileName         string  `json:"fileName"`
+		FbID             string  `json:"fbId"`
+		Extension        string  `json:"extension"`
 		ProcessedFiles   []struct {
 			Width  int    `json:"width"`
 			Height int    `json:"height"`
@@ -112,7 +113,122 @@ func (t *TinderGo) Profile() (Profile, error) {
 		return pfl, errs[0]
 	}
 
+	b = strings.Replace(b, "\"main\",", "true, ", -1)
+
 	err := json.Unmarshal([]byte(b), &pfl)
+	if err != nil {
+		return pfl, err
+	}
+
+	return pfl, nil
+}
+
+type ProfileUpdateResponse struct {
+	ID                string        `json:"_id"`
+	ActiveTime        time.Time     `json:"active_time"`
+	AgeFilterMax      int           `json:"age_filter_max"`
+	AgeFilterMin      int           `json:"age_filter_min"`
+	APIToken          string        `json:"api_token"`
+	Badges            []interface{} `json:"badges"`
+	Bio               string        `json:"bio"`
+	BirthDate         time.Time     `json:"birth_date"`
+	Blend             string        `json:"blend"`
+	CanCreateSquad    bool          `json:"can_create_squad"`
+	College           []interface{} `json:"college"`
+	ConnectionCount   int           `json:"connection_count"`
+	CreateDate        time.Time     `json:"create_date"`
+	Discoverable      bool          `json:"discoverable"`
+	DistanceFilter    int           `json:"distance_filter"`
+	DistanceFilterMin int           `json:"distance_filter_min"`
+	Friends           []string      `json:"friends"`
+	FullName          string        `json:"full_name"`
+	Gender            int           `json:"gender"`
+	GenderFilter      int           `json:"gender_filter"`
+	Groups            []interface{} `json:"groups"`
+	HighSchool        []interface{} `json:"high_school"`
+	InterestedIn      []int         `json:"interested_in"`
+	Interests         []struct {
+		CreatedTime string `json:"created_time"`
+		ID          string `json:"id"`
+		Name        string `json:"name"`
+	} `json:"interests"`
+	Jobs []struct {
+		Title struct {
+			Displayed bool   `json:"displayed"`
+			Name      string `json:"name"`
+			ID        string `json:"id"`
+		} `json:"title"`
+		Company struct {
+			Displayed bool   `json:"displayed"`
+			Name      string `json:"name"`
+			ID        string `json:"id"`
+		} `json:"company"`
+	} `json:"jobs"`
+	LatestUpdateDate time.Time   `json:"latest_update_date"`
+	Location         interface{} `json:"location"`
+	Name             string      `json:"name"`
+	Photos           []struct {
+		YoffsetPercent   int    `json:"yoffset_percent,omitempty"`
+		ID               string `json:"id"`
+		XdistancePercent int    `json:"xdistance_percent,omitempty"`
+		Main             bool   `json:"main,omitempty"`
+		YdistancePercent int    `json:"ydistance_percent,omitempty"`
+		XoffsetPercent   int    `json:"xoffset_percent,omitempty"`
+		FileName         string `json:"fileName"`
+		FbID             string `json:"fbId"`
+		Extension        string `json:"extension"`
+		ProcessedFiles   []struct {
+			Width  int    `json:"width"`
+			Height int    `json:"height"`
+			URL    string `json:"url"`
+		} `json:"processedFiles"`
+		URL         string  `json:"url"`
+		SuccessRate float64 `json:"successRate"`
+		SelectRate  int     `json:"selectRate"`
+		Shape       string  `json:"shape,omitempty"`
+	} `json:"photos"`
+	PhotoOptimizerEnabled   bool      `json:"photo_optimizer_enabled"`
+	PhotoOptimizerHasResult bool      `json:"photo_optimizer_has_result"`
+	PingTime                time.Time `json:"ping_time"`
+	Pos                     struct {
+		At  int64   `json:"at"`
+		Lat float64 `json:"lat"`
+		Lon float64 `json:"lon"`
+	} `json:"pos"`
+	PosMajor struct {
+		Lat float64 `json:"lat"`
+		Lon float64 `json:"lon"`
+		At  int64   `json:"at"`
+	} `json:"pos_major"`
+	PromotedOutOfDate  bool          `json:"promoted_out_of_date"`
+	Schools            []interface{} `json:"schools"`
+	SquadsOnly         bool          `json:"squads_only"`
+	SquadsDiscoverable bool          `json:"squads_discoverable"`
+	SquadAdsShown      bool          `json:"squad_ads_shown"`
+	Username           string        `json:"username"`
+}
+
+type ProfileUpdateRequest struct {
+	DistanceFilter int `json:"distance_filter"`
+}
+
+func (t *TinderGo) UpdateDistance(miles int) (ProfileUpdateResponse, error) {
+	pfl := ProfileUpdateResponse{}
+	req := ProfileUpdateRequest{DistanceFilter: miles}
+	bReq, err := json.Marshal(req)
+	if err != nil {
+		return pfl, err
+	}
+
+	url := "https://api.gotinder.com/profile"
+	b, errs := t.requester.Post(url, string(bReq))
+	if errs != nil {
+		return pfl, errs[0]
+	}
+
+	b = strings.Replace(b, "\"main\",", "true, ", -1)
+
+	err = json.Unmarshal([]byte(b), &pfl)
 	if err != nil {
 		return pfl, err
 	}

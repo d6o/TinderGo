@@ -3,6 +3,7 @@ package tindergo
 import (
 	"encoding/json"
 	"errors"
+	"strings"
 	"time"
 )
 
@@ -35,7 +36,7 @@ type UserPhoto struct {
 	Extension string `json:"extension"`
 	FileName  string `json:"fileName"`
 	Shape     string `json:"shape"`
-	Main      string `json:"main,omitempty"`
+	Main      bool   `json:"main,omitempty"`
 	ID        string `json:"id"`
 }
 
@@ -51,6 +52,8 @@ func (t *TinderGo) User(userID string) (User, error) {
 	if errs != nil {
 		return user.Results, errs[0]
 	}
+
+	b = strings.Replace(b, "\"main\",", "true, ", -1)
 
 	err := json.Unmarshal([]byte(b), &user)
 	if err != nil {

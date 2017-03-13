@@ -21,7 +21,7 @@ func (t *TinderGo) Decide(user RecsCoreUser, action string) (LikeResponse, error
 		return like, errs[0]
 	}
 
-	err := json.Unmarshal([]byte(b), &recs)
+	err := json.Unmarshal([]byte(b), &like)
 	if err != nil {
 		return like, err
 	}
@@ -33,10 +33,10 @@ func (t *TinderGo) Decide(user RecsCoreUser, action string) (LikeResponse, error
 	return like, nil
 }
 
-func (t *TinderGo) Like(user RecsCoreResponse) (LikeResponse, error) {
+func (t *TinderGo) Like(user RecsCoreUser) (LikeResponse, error) {
 	return t.Decide(user, "like")
 }
 
-func (t *TinderGo) Pass(user RecsCoreResponse) (LikeResponse, error) {
+func (t *TinderGo) Pass(user RecsCoreUser) (LikeResponse, error) {
 	return t.Decide(user, "pass")
 }
