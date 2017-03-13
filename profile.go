@@ -2,6 +2,7 @@ package tindergo
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 )
@@ -49,7 +50,7 @@ type Profile struct {
 		YdistancePercent float64 `json:"ydistance_percent,omitempty"`
 		XoffsetPercent   float64 `json:"xoffset_percent,omitempty"`
 		FileName         string  `json:"fileName"`
-		FbID             string  `json:"fbId"`
+		FbID             int64   `json:"fbId,string"`
 		Extension        string  `json:"extension"`
 		ProcessedFiles   []struct {
 			Width  int    `json:"width"`
@@ -58,7 +59,7 @@ type Profile struct {
 		} `json:"processedFiles"`
 		URL         string  `json:"url"`
 		SuccessRate float64 `json:"successRate"`
-		SelectRate  int     `json:"selectRate"`
+		SelectRate  float64 `json:"selectRate"`
 		Shape       string  `json:"shape,omitempty"`
 	} `json:"photos"`
 	PhotoOptimizerEnabled   bool      `json:"photo_optimizer_enabled"`
@@ -114,6 +115,8 @@ func (t *TinderGo) Profile() (Profile, error) {
 	}
 
 	b = strings.Replace(b, "\"main\",", "true, ", -1)
+
+	fmt.Println(b)
 
 	err := json.Unmarshal([]byte(b), &pfl)
 	if err != nil {
@@ -175,7 +178,7 @@ type ProfileUpdateResponse struct {
 		YdistancePercent int    `json:"ydistance_percent,omitempty"`
 		XoffsetPercent   int    `json:"xoffset_percent,omitempty"`
 		FileName         string `json:"fileName"`
-		FbID             string `json:"fbId"`
+		FbID             int64  `json:"fbId,string"`
 		Extension        string `json:"extension"`
 		ProcessedFiles   []struct {
 			Width  int    `json:"width"`
