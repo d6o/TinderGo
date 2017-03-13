@@ -42,7 +42,7 @@ type Profile struct {
 	Location interface{} `json:"location"`
 	Name     string      `json:"name"`
 	Photos   []struct {
-		YoffsetPercent   int     `json:"yoffset_percent,omitempty"`
+		YoffsetPercent   float64 `json:"yoffset_percent,omitempty"`
 		ID               string  `json:"id"`
 		XdistancePercent float64 `json:"xdistance_percent,omitempty"`
 		Main             bool    `json:"main,omitempty"`
@@ -88,7 +88,7 @@ type Profile struct {
 			Bounds struct {
 				Ne struct {
 					Lat float64 `json:"lat"`
-					Lng int     `json:"lng"`
+					Lng float64 `json:"lng"`
 				} `json:"ne"`
 				Sw struct {
 					Lat float64 `json:"lat"`
