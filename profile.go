@@ -2,7 +2,6 @@ package tindergo
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
 	"time"
 )
@@ -50,7 +49,6 @@ type Profile struct {
 		YdistancePercent float64 `json:"ydistance_percent,omitempty"`
 		XoffsetPercent   float64 `json:"xoffset_percent,omitempty"`
 		FileName         string  `json:"fileName"`
-		FbID             int64   `json:"fbId,string"`
 		Extension        string  `json:"extension"`
 		ProcessedFiles   []struct {
 			Width  int    `json:"width"`
@@ -116,8 +114,6 @@ func (t *TinderGo) Profile() (Profile, error) {
 
 	b = strings.Replace(b, "\"main\",", "true, ", -1)
 
-	fmt.Println(b)
-
 	err := json.Unmarshal([]byte(b), &pfl)
 	if err != nil {
 		return pfl, err
@@ -178,7 +174,6 @@ type ProfileUpdateResponse struct {
 		YdistancePercent int    `json:"ydistance_percent,omitempty"`
 		XoffsetPercent   int    `json:"xoffset_percent,omitempty"`
 		FileName         string `json:"fileName"`
-		FbID             int64  `json:"fbId,string"`
 		Extension        string `json:"extension"`
 		ProcessedFiles   []struct {
 			Width  int    `json:"width"`
