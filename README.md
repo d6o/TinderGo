@@ -1,2 +1,2 @@
 # TinderGo
-GoLang client for tinder api
+GoLang 1.8 client for tinder api
