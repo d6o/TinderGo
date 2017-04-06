@@ -29,7 +29,7 @@ type Match struct {
 		Name      string        `json:"name"`
 		PingTime  time.Time     `json:"ping_time"`
 		Photos    []struct {
-			SelectRate     int     `json:"selectRate"`
+			SelectRate     float64 `json:"selectRate"`
 			SuccessRate    float64 `json:"successRate"`
 			FileName       string  `json:"fileName"`
 			ID             string  `json:"id"`
